@@ -1,0 +1,32 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inwx-dyndns
+spec:
+  selector:
+    matchLabels:
+      app: inwx-dyndns
+  template:
+    metadata:
+      labels:
+        app: inwx-dyndns
+    spec:
+      containers:
+      - name: inwx-dyndns
+        image: ghcr.io/nobbs/inwx-dyndns:latest
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        volumeMounts:
+          - mountPath: /config
+            name: credentials
+            readOnly: true
+      volumes:
+        - name: credentials
+          secret:
+            secretName: inwx-dyndns-credentials
